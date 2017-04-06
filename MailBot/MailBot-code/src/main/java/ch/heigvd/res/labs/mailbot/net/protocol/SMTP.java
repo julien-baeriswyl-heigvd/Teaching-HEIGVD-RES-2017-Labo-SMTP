@@ -7,9 +7,13 @@ package ch.heigvd.res.labs.mailbot.net.protocol;
  * @author Iando  Rafidimalala [CREATED BY] (iando.rafidimalalathevoz@heig-vd.ch, Mantha32)
  * @since  2017-04-06
  */
-
-public interface ISMTPClient
+public enum SMTP
 {
-    @Override
-    public boolean sendMail (Mail mail) throws IOException;
+    EHLO(), MAIL_FROM(), RCPT_TO(), DATA();
+
+    SMTP()
+    {
+
+    }
+
 }

@@ -9,5 +9,10 @@ package ch.heigvd.res.labs.mailbot.model.mail;
  */
 public class Person
 {
-    
+    private String email;
+
+    public Person ()
+    {
+
+    }
 }

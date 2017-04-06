@@ -1,6 +1,7 @@
 package ch.heigvd.res.labs.mailbot.cfg;
 
 import java.io.File;
+import java.util.Properties;
 
 /**
  * 
@@ -12,6 +13,8 @@ import java.io.File;
 
 public class ConfigManager implements IConfigManager
 {
+
+
     @Override
     public void load (File cfgfile)
     {
