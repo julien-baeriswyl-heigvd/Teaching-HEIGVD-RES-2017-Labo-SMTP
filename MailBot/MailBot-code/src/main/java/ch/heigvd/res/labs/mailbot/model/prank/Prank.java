@@ -9,4 +9,8 @@ package ch.heigvd.res.labs.mailbot.model.prank;
  */
 public class Prank
 {
+    public Prank ()
+    {
+
+    }
 }

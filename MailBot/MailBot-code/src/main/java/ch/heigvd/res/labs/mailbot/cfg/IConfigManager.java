@@ -1,6 +1,7 @@
 package ch.heigvd.res.labs.mailbot.cfg;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * 
@@ -11,5 +12,5 @@ import java.io.File;
  */
 public interface IConfigManager
 {
-    void load (File cfgfile);
+    void load (File cfg) throws IOException;
 }
