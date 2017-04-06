@@ -1,5 +1,6 @@
 package ch.heigvd.res.labs.mailbot.model.mail;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 
@@ -17,7 +18,12 @@ public class Group
 
     public Group (Person... people)
     {
-        this.people = Arrays.asList(people);
+        this.people = new ArrayList<>();
+
+        for (Person p : people)
+        {
+            add(p);
+        }
     }
 
     public Group (List<Person> people)

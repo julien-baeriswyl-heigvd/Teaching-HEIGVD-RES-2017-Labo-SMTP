@@ -1,7 +1,6 @@
 package ch.heigvd.res.labs.mailbot.model.mail;
 
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * 
@@ -21,9 +20,13 @@ public class Mail
 
     private void prepareHeader (StringBuilder sb, String header, List<Person> people)
     {
+        if (people.isEmpty())
+        {
+            return;
+        }
+
         sb.append(header);
         sb.append(people.get(0).getEmail());
-
         for (int i = 1; i < people.size(); ++i)
         {
             sb.append(", ");

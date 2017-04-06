@@ -2,6 +2,9 @@ package ch.heigvd.res.labs.mailbot;
 
 import ch.heigvd.res.labs.mailbot.cfg.ConfigManager;
 import ch.heigvd.res.labs.mailbot.model.mail.Person;
+import ch.heigvd.res.labs.mailbot.model.mail.Group;
+import ch.heigvd.res.labs.mailbot.model.mail.Mail;
+import ch.heigvd.res.labs.mailbot.net.client.SMTPClient;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -75,26 +78,26 @@ public class MailBot
             throw new IllegalArgumentException("invalid CLI arguments, folders does not exists");
         }
 
-        ConfigManager cfg = new ConfigManager(new File(cfgDir.getPath() + File.separator + "client.properties"));
+        ConfigManager cfg     = new ConfigManager(new File(cfgDir.getPath() + File.separator + "client.properties"));
+        List<Person>  victims = victimsFromFile(new File(dataDir.getPath() + File.separator + "victims.utf8"));
+        List<String>  msg     = messagesFromFile(new File(dataDir.getPath() + File.separator + "messages.utf8"));
 
-        for (ConfigManager.Setting s : ConfigManager.Setting.values())
+        SMTPClient client = new SMTPClient();
+        client.connect(cfg.getSetting(ConfigManager.Setting.SmtpServerAddress), Integer.parseInt(cfg.getSetting(ConfigManager.Setting.SmtpServerPort)));
+
+        int gsize     = victims.size() / msg.size(),
+            remainder = victims.size() % msg.size();
+
+        for (int i = 1; i < msg.size(); ++i)
         {
-            System.out.println(cfg.getSetting(s));
+            Group g = new Group();
+            for (int j = 1; j < gsize; ++j)
+            {
+                g.add(victims.get((i - 1) * gsize + j));
+            }
+            client.sendMail(new Mail(victims.get((i - 1) * gsize), g, new Group(), new Group(), msg.get(i)));
         }
 
-        List<Person> victims = victimsFromFile(new File(dataDir.getPath() + File.separator + "victims.utf8"));
-
-        for (Person p : victims)
-        {
-            System.out.println(p);
-        }
-
-        List<String> msg = messagesFromFile(new File(dataDir.getPath() + File.separator + "messages.utf8"));
-
-        for (String s : msg)
-        {
-            System.out.println(s);
-            System.out.println();
-        }
+        client.disconnect();
     }
 }

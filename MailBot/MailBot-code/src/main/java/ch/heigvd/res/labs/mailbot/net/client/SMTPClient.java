@@ -55,7 +55,7 @@ public class SMTPClient implements ISMTPClient
      * @return <code>true</code> if send operation succeed, else <code>false</code>
      * @throws IOException if write operation to server failed
      */
-    protected boolean sendCommand (SMTP.Command cmd, String data) throws IOException
+    private boolean sendCommand (SMTP.Command cmd, String data) throws IOException
     {
         // JBL: control socket connexion
         if (!isConnected())
@@ -64,7 +64,7 @@ public class SMTPClient implements ISMTPClient
         }
 
         // JBL: send command
-        pw.println(cmd.prepare(data));
+        pw.print(cmd.prepare(data));
         pw.flush();
         if (pw.checkError())
         {
@@ -72,7 +72,12 @@ public class SMTPClient implements ISMTPClient
         }
 
         // JBL: check server answered properly
-        return retrieveCode() != cmd.getCodeSuccess();
+        return retrieveCode() == cmd.getCodeSuccess();
+    }
+
+    private boolean sendCommand (SMTP.Command cmd) throws IOException
+    {
+        return sendCommand(cmd, "");
     }
 
     @Override
@@ -87,9 +92,9 @@ public class SMTPClient implements ISMTPClient
             pw = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream(), "UTF-8"));
 
             // JBL: check if connection init succeed
-            if (retrieveCode() != SMTP.ReturnCode.SERVICE_READY)
+            if (retrieveCode() != SMTP.ReturnCode.SERVICE_READY || !sendCommand(SMTP.EHLO, SMTPClient.class.getSimpleName()))
             {
-                throw new IOException("SMTP server refused connection");
+                throw new IOException("SMTP server failed handshake");
             }
         }
     }
@@ -98,7 +103,7 @@ public class SMTPClient implements ISMTPClient
     public void disconnect() throws IOException
     {
         // JBL: ?
-        if (isConnected() && sendCommand(SMTP.QUIT,""))
+        if (isConnected() && sendCommand(SMTP.QUIT))
         {
             pw.close();
             br.close();
@@ -122,26 +127,34 @@ public class SMTPClient implements ISMTPClient
     {
         String body = mail.toString();
 
-        sendCommand(SMTP.EHLO, SMTPClient.class.getSimpleName());
-
-        sendCommand(SMTP.MAIL_FROM, mail.getFrom().getEmail());
         for (Person to : mail.getTo().getList())
         {
+            sendCommand(SMTP.MAIL_FROM, mail.getFrom().getEmail());
             sendCommand(SMTP.RCPT_TO, to.getEmail());
+            sendCommand(SMTP.DATA);
+            pw.println(body);
+            pw.flush();
+            sendCommand(SMTP.ENDDATA);
         }
 
-        for (Person to : mail.getCc().getList())
+        for (Person cc : mail.getCc().getList())
         {
-            sendCommand(SMTP.RCPT_TO, to.getEmail());
+            sendCommand(SMTP.MAIL_FROM, mail.getFrom().getEmail());
+            sendCommand(SMTP.RCPT_TO, cc.getEmail());
+            sendCommand(SMTP.DATA);
+            pw.println(body);
+            pw.flush();
+            sendCommand(SMTP.ENDDATA);
         }
 
-        for (Person to : mail.getBcc().getList())
+        for (Person bcc : mail.getBcc().getList())
         {
-            sendCommand(SMTP.RCPT_TO, to.getEmail());
+            sendCommand(SMTP.MAIL_FROM, mail.getFrom().getEmail());
+            sendCommand(SMTP.RCPT_TO, bcc.getEmail());
+            sendCommand(SMTP.DATA);
+            pw.println(body);
+            pw.flush();
+            sendCommand(SMTP.ENDDATA);
         }
-
-        sendCommand(SMTP.DATA, "");
-        pw.println(body);
-        sendCommand(SMTP.ENDDATA,"");
     }
 }

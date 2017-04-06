@@ -28,6 +28,7 @@ public class SMTP
 
     public static class Command
     {
+        private static final String ENTER = "\r\n";
         private String     mnemonic;
         private int        codeSuccess;
         private boolean    hasField;
@@ -51,7 +52,7 @@ public class SMTP
 
         public String prepare (String data)
         {
-            return mnemonic + (hasField ? data : " ");
+            return mnemonic + " " + (hasField ? data : "") + ENTER;
         }
 
         public static int parseCode (String response)
@@ -64,6 +65,6 @@ public class SMTP
                                 MAIL_FROM = new Command("MAIL FROM:", ReturnCode.REQUEST_OK, true),
                                 RCPT_TO   = new Command("RCPT TO:", ReturnCode.REQUEST_OK, true),
                                 DATA      = new Command("DATA", ReturnCode.START_INPUT, false),
-                                ENDDATA   = new Command("\r\n.\r\n", ReturnCode.REQUEST_OK, false),
+                                ENDDATA   = new Command(Command.ENTER+"."+Command.ENTER, ReturnCode.REQUEST_OK, false),
                                 QUIT      = new Command("QUIT", ReturnCode.SERVICE_CLOSING, false);
 }
