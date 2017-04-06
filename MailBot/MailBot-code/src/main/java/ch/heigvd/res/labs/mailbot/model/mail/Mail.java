@@ -1,5 +1,8 @@
 package ch.heigvd.res.labs.mailbot.model.mail;
 
+import java.util.List;
+import java.util.StringTokenizer;
+
 /**
  * 
  * 
@@ -15,6 +18,20 @@ public class Mail
                    bcc;
 
     private String data;
+
+    private void prepareHeader (StringBuilder sb, String header, List<Person> people)
+    {
+        sb.append(header);
+        sb.append(people.get(0).getEmail());
+
+        for (int i = 1; i < people.size(); ++i)
+        {
+            sb.append(", ");
+            sb.append(people.get(i).getEmail());
+        }
+
+        sb.append("\r\n");
+    }
 
     public Mail (Person from, Group to, Group cc, Group bcc, String data)
     {
@@ -48,5 +65,20 @@ public class Mail
     public String getData ()
     {
         return data;
+    }
+
+    @Override
+    public String toString ()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("From: ");
+        sb.append(from.getEmail());
+        sb.append("\r\n");
+
+        prepareHeader(sb, "To: ", to.getList());
+        prepareHeader(sb, "Cc: ", cc.getList());
+
+        sb.append(data);
+        return sb.toString();
     }
 }

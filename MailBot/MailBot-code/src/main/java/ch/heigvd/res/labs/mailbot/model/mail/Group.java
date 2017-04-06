@@ -1,8 +1,7 @@
 package ch.heigvd.res.labs.mailbot.model.mail;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * 
@@ -12,23 +11,23 @@ import java.util.ArrayList;
  * @since  2017-04-06
  */
 
-public class Group implements Iterable<Person>
+public class Group
 {
     private List<Person> people;
 
     public Group (Person... people)
     {
-        this.people = new ArrayList<>();
-
-        for (Person p : people)
-        {
-            this.people.add(p);
-        }
+        this.people = Arrays.asList(people);
     }
 
     public Group (List<Person> people)
     {
-        this.people = new ArrayList<>(people);
+        this.people = people;
+    }
+
+    public void add (Person p)
+    {
+        people.add(p);
     }
 
     public int size ()
@@ -36,8 +35,8 @@ public class Group implements Iterable<Person>
         return people.size();
     }
 
-    public Iterator<Person> iterator ()
+    public List<Person> getList ()
     {
-        return people.iterator();
+        return people;
     }
 }

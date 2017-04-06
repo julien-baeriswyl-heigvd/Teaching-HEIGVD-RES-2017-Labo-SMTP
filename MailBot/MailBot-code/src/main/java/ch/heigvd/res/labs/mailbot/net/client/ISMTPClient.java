@@ -36,5 +36,5 @@ public interface ISMTPClient
      */
     boolean isConnected();
 
-    boolean sendMail (Mail mail) throws IOException;
+    void sendMail (Mail mail) throws IOException;
 }

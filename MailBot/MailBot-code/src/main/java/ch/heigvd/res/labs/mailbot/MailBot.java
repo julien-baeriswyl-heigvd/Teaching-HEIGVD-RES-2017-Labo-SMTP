@@ -29,7 +29,7 @@ public class MailBot
         return victims;
     }
 
-    private static List<String> messageFromFile (File file) throws IOException
+    private static List<String> messagesFromFile (File file) throws IOException
     {
         String separator = "----";
         BufferedReader br  = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
@@ -46,6 +46,7 @@ public class MailBot
             else
             {
                 sb.append(s);
+                sb.append(String.format("%n"));
             }
         }
 
@@ -88,7 +89,7 @@ public class MailBot
             System.out.println(p);
         }
 
-        List<String> msg = messageFromFile(new File(dataDir.getPath() + File.separator + "messages.utf8"));
+        List<String> msg = messagesFromFile(new File(dataDir.getPath() + File.separator + "messages.utf8"));
 
         for (String s : msg)
         {

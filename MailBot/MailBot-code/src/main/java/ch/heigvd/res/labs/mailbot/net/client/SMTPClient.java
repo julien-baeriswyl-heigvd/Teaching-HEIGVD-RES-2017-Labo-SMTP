@@ -1,6 +1,7 @@
 package ch.heigvd.res.labs.mailbot.net.client;
 
 import ch.heigvd.res.labs.mailbot.model.mail.Mail;
+import ch.heigvd.res.labs.mailbot.model.mail.Person;
 import ch.heigvd.res.labs.mailbot.net.protocol.SMTP;
 
 import java.io.IOException;
@@ -25,19 +26,71 @@ public class SMTPClient implements ISMTPClient
     private Socket         clientSocket;
     private PrintWriter    pw;
     private BufferedReader br;
+    private String         response;
+
+    /**
+     * Retrieve response code.
+     *
+     * @return parsed server response code
+     * @throws IOException if reading answer failed
+     */
+    private int retrieveCode () throws IOException
+    {
+        // JBL: wait for line with format <code><space><something>
+        do
+        {
+            response = br.readLine();
+        }
+        while (response.charAt(3) != ' ');
+
+        // JBL: extract return code
+        return SMTP.Command.parseCode(response);
+    }
+
+    /**
+     * Send command to server through client socket.
+     *
+     * @param cmd  command token send to server
+     * @param data field to send with command
+     * @return <code>true</code> if send operation succeed, else <code>false</code>
+     * @throws IOException if write operation to server failed
+     */
+    protected boolean sendCommand (SMTP.Command cmd, String data) throws IOException
+    {
+        // JBL: control socket connexion
+        if (!isConnected())
+        {
+            throw new IOException("client is not connected");
+        }
+
+        // JBL: send command
+        pw.println(cmd.prepare(data));
+        pw.flush();
+        if (pw.checkError())
+        {
+            throw new IOException("failed to send command - `" + cmd + "`");
+        }
+
+        // JBL: check server answered properly
+        return retrieveCode() != cmd.getCodeSuccess();
+    }
 
     @Override
     public void connect (String server, int port) throws IOException
     {
-        clientSocket = new Socket(server, port);
-        if (isConnected())
+        if (!isConnected())
         {
-            // JBL: open input and output stream
-            br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            pw = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+            clientSocket = new Socket(server, port);
 
-            // JBL: destroy initial text message send by server
-            br.readLine();
+            // JBL: open input and output stream
+            br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), "UTF-8"));
+            pw = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream(), "UTF-8"));
+
+            // JBL: check if connection init succeed
+            if (retrieveCode() != SMTP.ReturnCode.SERVICE_READY)
+            {
+                throw new IOException("SMTP server refused connection");
+            }
         }
     }
 
@@ -45,7 +98,7 @@ public class SMTPClient implements ISMTPClient
     public void disconnect() throws IOException
     {
         // JBL: ?
-        if (true)
+        if (isConnected() && sendCommand(SMTP.QUIT,""))
         {
             pw.close();
             br.close();
@@ -65,8 +118,30 @@ public class SMTPClient implements ISMTPClient
     }
 
     @Override
-    public boolean sendMail (Mail mail) throws IOException
+    public void sendMail (Mail mail) throws IOException
     {
-        return false;
+        String body = mail.toString();
+
+        sendCommand(SMTP.EHLO, SMTPClient.class.getSimpleName());
+
+        sendCommand(SMTP.MAIL_FROM, mail.getFrom().getEmail());
+        for (Person to : mail.getTo().getList())
+        {
+            sendCommand(SMTP.RCPT_TO, to.getEmail());
+        }
+
+        for (Person to : mail.getCc().getList())
+        {
+            sendCommand(SMTP.RCPT_TO, to.getEmail());
+        }
+
+        for (Person to : mail.getBcc().getList())
+        {
+            sendCommand(SMTP.RCPT_TO, to.getEmail());
+        }
+
+        sendCommand(SMTP.DATA, "");
+        pw.println(body);
+        sendCommand(SMTP.ENDDATA,"");
     }
 }
