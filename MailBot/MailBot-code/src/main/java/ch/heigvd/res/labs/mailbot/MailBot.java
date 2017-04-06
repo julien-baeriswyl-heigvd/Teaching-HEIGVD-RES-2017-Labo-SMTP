@@ -31,7 +31,31 @@ public class MailBot
 
     private static List<String> messageFromFile (File file) throws IOException
     {
-        List<String> msg = new ArrayList<>();
+        String separator = "----";
+        BufferedReader br  = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+        List<String>   msg = new ArrayList<>();
+        StringBuilder  sb  = new StringBuilder();
+
+        for (String s = br.readLine(); s != null; s = br.readLine())
+        {
+            if (s.equals(separator))
+            {
+                msg.add(sb.toString());
+                sb = new StringBuilder();
+            }
+            else
+            {
+                sb.append(s);
+            }
+        }
+
+        String last = sb.toString();
+
+        if (!last.isEmpty())
+        {
+            msg.add(last);
+        }
+
         return msg;
     }
 
@@ -62,6 +86,14 @@ public class MailBot
         for (Person p : victims)
         {
             System.out.println(p);
+        }
+
+        List<String> msg = messageFromFile(new File(dataDir.getPath() + File.separator + "messages.utf8"));
+
+        for (String s : msg)
+        {
+            System.out.println(s);
+            System.out.println();
         }
     }
 }
