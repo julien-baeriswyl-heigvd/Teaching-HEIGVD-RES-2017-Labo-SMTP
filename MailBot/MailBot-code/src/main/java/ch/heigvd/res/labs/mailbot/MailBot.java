@@ -1,16 +1,11 @@
 package ch.heigvd.res.labs.mailbot;
 
 import ch.heigvd.res.labs.mailbot.cfg.ConfigManager;
-import ch.heigvd.res.labs.mailbot.model.mail.Person;
 import ch.heigvd.res.labs.mailbot.model.mail.Group;
-import ch.heigvd.res.labs.mailbot.model.mail.Mail;
 import ch.heigvd.res.labs.mailbot.model.prank.Prank;
 import ch.heigvd.res.labs.mailbot.model.prank.PrankGenerator;
-import ch.heigvd.res.labs.mailbot.net.client.SMTPClient;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * MailBot main program. Load files and launch prank campaign.

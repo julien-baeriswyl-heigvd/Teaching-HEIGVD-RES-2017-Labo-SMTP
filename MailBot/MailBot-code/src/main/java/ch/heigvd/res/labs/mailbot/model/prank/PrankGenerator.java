@@ -58,7 +58,7 @@ public class PrankGenerator
             idx      = (int)(Math.random() * subGroup.size());
             sender   = subGroup.get(idx);
             subGroup.remove(idx);
-            client.sendMail(new Mail(sender, subGroup, cc, new Group(), pranks.get((int)(Math.random() * pranks.size()))));
+            client.sendMail(new Mail(sender, subGroup, cc, new Group() /* empty BCC*/, pranks.get((int)(Math.random() * pranks.size()))));
         }
 
         client.disconnect();

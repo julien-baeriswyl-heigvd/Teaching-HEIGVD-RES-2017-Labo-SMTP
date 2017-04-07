@@ -10,7 +10,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.logging.Logger;
 
 /**
  * SMTP client, proceeding sequences of commands to connect, disconnect and send mail.
@@ -21,8 +20,6 @@ import java.util.logging.Logger;
  */
 public class SMTPClient implements ISMTPClient
 {
-    private static final Logger LOG = Logger.getLogger(SMTPClient.class.getName());
-
     private Socket         clientSocket;
     private PrintWriter    pw;
     private BufferedReader br;
