@@ -1,19 +1,25 @@
 # Teaching-HEIGVD-RES-2017-Labo-SMTP
 
+## Description
+This project allow to launch *prank* campaign of forged e-mails.  
+The provided tool is based on files and pseudo-random to define who are senders and who are recipients.  
+
+### Approach
+Project contains basic implementation of protocol and client SMTP.
+Therefore, SMTP server is required 
+
 ## Prerequisites
 ### Dependancies
 + Apache Maven
++ SMTP server (real or mock)
 
 ### Resources structure
 User must define few files, to make successful *prank* campaign.  
 + __cfg__ directory  
-	+ __client.properties__, the configutation file, looks like  
-[config](./MailBot/MailBot-code/cfg/client.properties)  
+	+ __client.properties__, the configutation file, looks like [configfile](./MailBot/MailBot-code/cfg/client.properties)  
 + __data__ directory  
-	1. __victims.utf8__, the victims' list, looks like  
-[victims](./MailBot/MailBot-code/data/victims.utf8)  
-	2. __messages.utf8__, the list of messages, looks like  
-[messages](./MailBot/MailBot-code/data/messages.utf8)  
+	1. __victims.utf8__, the victims' list, looks like [victims](./MailBot/MailBot-code/data/victims.utf8)  
+	2. __messages.utf8__, the list of messages, looks like [messages](./MailBot/MailBot-code/data/messages.utf8)  
 
 ## Use case
 Once resources are placed, we can launch campaign with command
@@ -21,6 +27,11 @@ Once resources are placed, we can launch campaign with command
 :::bash
 java -jar <jardir>MailBot-code-1.0-SNAPSHOT-standalone.jar <configdir> <datadir>
 ```
+
+## Test case
+If you want to test this tool, a mock server like [MockMock](https://github.com/julien-baeriswyl-heigvd/MockMock "mock server with Web interface") may be useful.  
+
+Once install of mock server and this project is done, you can launch campaign, by starting server first and execute our tool.  
 
 ## Objectives
 
@@ -77,11 +88,3 @@ In addition, your report SHOULD include (i.e. you will not have penalties if you
 ## Evaluation
 
 * See CyberLearn.
-
-
-
-
-
-
-
-
