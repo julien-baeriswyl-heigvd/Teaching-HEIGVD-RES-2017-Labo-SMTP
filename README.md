@@ -5,20 +5,15 @@
 + Apache Maven
 
 ### Resources structure
-User must define few files, to make successful *prank* campaign.
-+ __cfg__ directory
-      + __client.properties__, the configutation file, looks like
-
-![config](./MailBot/MailBot-code/cfg/client.properties)
-
-+ __data__ directory
-      1. __victims.utf8__, the victims' list, looks like
-
-![config](./MailBot/MailBot-code/data/victims.utf8)
-
-      2. __messages.utf8__, the list of messages, looks like
-      
-![config](./MailBot/MailBot-code/data/messages.utf8)
+User must define few files, to make successful *prank* campaign.  
++ __cfg__ directory  
+      + __client.properties__, the configutation file, looks like  
+[config](./MailBot/MailBot-code/cfg/client.properties)  
++ __data__ directory  
+      1. __victims.utf8__, the victims' list, looks like  
+[victims](./MailBot/MailBot-code/data/victims.utf8)  
+      2. __messages.utf8__, the list of messages, looks like  
+[messages](./MailBot/MailBot-code/data/messages.utf8)  
 
 ## Use case
 Once resources are placed, we can launch campaign with command
