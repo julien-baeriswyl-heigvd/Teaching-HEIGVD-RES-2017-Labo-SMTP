@@ -1,9 +1,7 @@
 package ch.heigvd.res.labs.mailbot.model.mail;
 
-import java.util.List;
-
 /**
- * 
+ * Represent mail structure with people and data.
  * 
  * @author Julien Baeriswyl    [CREATED BY] (julien.baeriswyl@heig-vd.ch,         julien-baeriswyl-heigvd)
  * @author Iando  Rafidimalala [CREATED BY] (iando.rafidimalalathevoz@heig-vd.ch, Mantha32)
@@ -18,7 +16,14 @@ public class Mail
 
     private String data;
 
-    private void prepareHeader (StringBuilder sb, String header, List<Person> people)
+    /**
+     * Prepare formatted header.
+     *
+     * @param sb     String stream to write in
+     * @param header text value of header
+     * @param people concerned by header (To, Cc, Bcc)
+     */
+    private void prepareHeader (StringBuilder sb, String header, Group people)
     {
         if (people.isEmpty())
         {
@@ -26,11 +31,11 @@ public class Mail
         }
 
         sb.append(header);
-        sb.append(people.get(0).getEmail());
+        sb.append(people.get(0));
         for (int i = 1; i < people.size(); ++i)
         {
             sb.append(", ");
-            sb.append(people.get(i).getEmail());
+            sb.append(people.get(i));
         }
 
         sb.append("\r\n");
@@ -71,15 +76,15 @@ public class Mail
     }
 
     @Override
-    public String toString ()
+    public String toString () // get mail body
     {
         StringBuilder sb = new StringBuilder();
         sb.append("From: ");
-        sb.append(from.getEmail());
+        sb.append(from);
         sb.append("\r\n");
 
-        prepareHeader(sb, "To: ", to.getList());
-        prepareHeader(sb, "Cc: ", cc.getList());
+        prepareHeader(sb, "To: ", to);
+        prepareHeader(sb, "Cc: ", cc);
 
         sb.append(data);
         return sb.toString();

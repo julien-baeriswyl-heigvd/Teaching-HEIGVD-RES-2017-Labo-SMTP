@@ -4,6 +4,8 @@ import ch.heigvd.res.labs.mailbot.cfg.ConfigManager;
 import ch.heigvd.res.labs.mailbot.model.mail.Person;
 import ch.heigvd.res.labs.mailbot.model.mail.Group;
 import ch.heigvd.res.labs.mailbot.model.mail.Mail;
+import ch.heigvd.res.labs.mailbot.model.prank.Prank;
+import ch.heigvd.res.labs.mailbot.model.prank.PrankGenerator;
 import ch.heigvd.res.labs.mailbot.net.client.SMTPClient;
 
 import java.io.*;
@@ -11,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 
+ * MailBot main program. Load files and launch prank campaign.
  * 
  * @author Julien Baeriswyl    [CREATED BY] (julien.baeriswyl@heig-vd.ch,         julien-baeriswyl-heigvd)
  * @author Iando  Rafidimalala [CREATED BY] (iando.rafidimalalathevoz@heig-vd.ch, Mantha32)
@@ -19,52 +21,15 @@ import java.util.List;
  */
 public class MailBot
 {
-    private static List<Person> victimsFromFile (File file) throws IOException
-    {
-        BufferedReader br      = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
-        List<Person>   victims = new ArrayList<>();
-
-        for (String s = br.readLine(); s != null; s = br.readLine())
-        {
-            victims.add(new Person(s));
-        }
-
-        return victims;
-    }
-
-    private static List<String> messagesFromFile (File file) throws IOException
-    {
-        String separator = "----";
-        BufferedReader br  = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
-        List<String>   msg = new ArrayList<>();
-        StringBuilder  sb  = new StringBuilder();
-
-        for (String s = br.readLine(); s != null; s = br.readLine())
-        {
-            if (s.equals(separator))
-            {
-                msg.add(sb.toString());
-                sb = new StringBuilder();
-            }
-            else
-            {
-                sb.append(s);
-                sb.append(String.format("%n"));
-            }
-        }
-
-        String last = sb.toString();
-
-        if (!last.isEmpty())
-        {
-            msg.add(last);
-        }
-
-        return msg;
-    }
-
     public static void main (String[] args) throws IllegalArgumentException, IOException
     {
+        final char   CSV_SEPARATOR = ',';
+        final String MSG_SEPARATOR = "----";
+
+        final String CFG_FILENAME     = "client.properties",
+                     MSG_FILENAME     = "messages.utf8",
+                     VICTIMS_FILENAME = "victims.utf8";
+
         if (args.length < 2)
         {
             throw new IllegalArgumentException("invalid number of arguments, received: " + args.length + ", expected: 2");
@@ -78,26 +43,10 @@ public class MailBot
             throw new IllegalArgumentException("invalid CLI arguments, folders does not exists");
         }
 
-        ConfigManager cfg     = new ConfigManager(new File(cfgDir.getPath() + File.separator + "client.properties"));
-        List<Person>  victims = victimsFromFile(new File(dataDir.getPath() + File.separator + "victims.utf8"));
-        List<String>  msg     = messagesFromFile(new File(dataDir.getPath() + File.separator + "messages.utf8"));
-
-        SMTPClient client = new SMTPClient();
-        client.connect(cfg.getSetting(ConfigManager.Setting.SmtpServerAddress), Integer.parseInt(cfg.getSetting(ConfigManager.Setting.SmtpServerPort)));
-
-        int gsize     = victims.size() / msg.size(),
-            remainder = victims.size() % msg.size();
-
-        for (int i = 1; i < msg.size(); ++i)
-        {
-            Group g = new Group();
-            for (int j = 1; j < gsize; ++j)
-            {
-                g.add(victims.get((i - 1) * gsize + j));
-            }
-            client.sendMail(new Mail(victims.get((i - 1) * gsize), g, new Group(), new Group(), msg.get(i)));
-        }
-
-        client.disconnect();
+        PrankGenerator pg = new PrankGenerator(new ConfigManager(new File(cfgDir.getPath() + File.separator + CFG_FILENAME)));
+        pg.generate(
+            new Prank(new FileInputStream(new File(dataDir.getPath() + File.separator + MSG_FILENAME)), MSG_SEPARATOR),
+            new Group(new FileInputStream(new File(dataDir.getPath() + File.separator + VICTIMS_FILENAME)), CSV_SEPARATOR)
+        );
     }
 }

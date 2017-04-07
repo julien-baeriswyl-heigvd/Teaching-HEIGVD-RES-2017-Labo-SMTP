@@ -13,8 +13,8 @@ import java.net.Socket;
 import java.util.logging.Logger;
 
 /**
- * 
- * 
+ * SMTP client, proceeding sequences of commands to connect, disconnect and send mail.
+ *
  * @author Julien Baeriswyl    [CREATED BY] (julien.baeriswyl@heig-vd.ch,         julien-baeriswyl-heigvd)
  * @author Iando  Rafidimalala [CREATED BY] (iando.rafidimalalathevoz@heig-vd.ch, Mantha32)
  * @since  2017-04-06
@@ -75,6 +75,13 @@ public class SMTPClient implements ISMTPClient
         return retrieveCode() == cmd.getCodeSuccess();
     }
 
+    /**
+     * Send command to server through client socket.
+     *
+     * @param cmd  command token send to server
+     * @return <code>true</code> if send operation succeed, else <code>false</code>
+     * @throws IOException if write operation to server failed
+     */
     private boolean sendCommand (SMTP.Command cmd) throws IOException
     {
         return sendCommand(cmd, "");
@@ -127,7 +134,7 @@ public class SMTPClient implements ISMTPClient
     {
         String body = mail.toString();
 
-        for (Person to : mail.getTo().getList())
+        for (Person to : mail.getTo())
         {
             sendCommand(SMTP.MAIL_FROM, mail.getFrom().getEmail());
             sendCommand(SMTP.RCPT_TO, to.getEmail());
@@ -137,7 +144,7 @@ public class SMTPClient implements ISMTPClient
             sendCommand(SMTP.ENDDATA);
         }
 
-        for (Person cc : mail.getCc().getList())
+        for (Person cc : mail.getCc())
         {
             sendCommand(SMTP.MAIL_FROM, mail.getFrom().getEmail());
             sendCommand(SMTP.RCPT_TO, cc.getEmail());
@@ -147,7 +154,7 @@ public class SMTPClient implements ISMTPClient
             sendCommand(SMTP.ENDDATA);
         }
 
-        for (Person bcc : mail.getBcc().getList())
+        for (Person bcc : mail.getBcc())
         {
             sendCommand(SMTP.MAIL_FROM, mail.getFrom().getEmail());
             sendCommand(SMTP.RCPT_TO, bcc.getEmail());

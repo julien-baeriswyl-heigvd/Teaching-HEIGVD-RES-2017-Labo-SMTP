@@ -1,24 +1,21 @@
 package ch.heigvd.res.labs.mailbot.model.mail;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Arrays;
 
 /**
- * 
+ * Group of people, as list. With file parser.
  * 
  * @author Julien Baeriswyl    [CREATED BY] (julien.baeriswyl@heig-vd.ch,         julien-baeriswyl-heigvd)
  * @author Iando  Rafidimalala [CREATED BY] (iando.rafidimalalathevoz@heig-vd.ch, Mantha32)
  * @since  2017-04-06
  */
-
-public class Group
+public class Group extends ArrayList<Person>
 {
-    private List<Person> people;
-
     public Group (Person... people)
     {
-        this.people = new ArrayList<>();
+        super();
 
         for (Person p : people)
         {
@@ -26,23 +23,24 @@ public class Group
         }
     }
 
-    public Group (List<Person> people)
+    /**
+     * Construct group based on stream content with format 'firstname[separator]lastname[separator]email' on each line.
+     *
+     * @remark no control done over format
+     *
+     * @param stream          content to parse
+     * @param fieldSeparator  separate each data field
+     * @throws IOException if reading stream failed
+     */
+    public Group (InputStream stream, char fieldSeparator) throws IOException
     {
-        this.people = people;
-    }
+        BufferedReader br    = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
 
-    public void add (Person p)
-    {
-        people.add(p);
-    }
-
-    public int size ()
-    {
-        return people.size();
-    }
-
-    public List<Person> getList ()
-    {
-        return people;
+        for (String s = br.readLine(); s != null; s = br.readLine())
+        {
+            int idx0 = s.indexOf(fieldSeparator),
+                idx1 = s.indexOf(fieldSeparator, idx0 + 1);
+            add(new Person(s.substring(0, idx0), s.substring(idx0 + 1, idx1), s.substring(idx1 + 1)));
+        }
     }
 }

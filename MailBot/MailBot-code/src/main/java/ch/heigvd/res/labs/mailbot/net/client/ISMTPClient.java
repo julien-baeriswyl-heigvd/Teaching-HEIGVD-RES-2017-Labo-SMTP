@@ -4,7 +4,7 @@ import ch.heigvd.res.labs.mailbot.model.mail.Mail;
 import java.io.IOException;
 
 /**
- * 
+ * SMTP client interface.
  * 
  * @author Julien Baeriswyl    [CREATED BY] (julien.baeriswyl@heig-vd.ch,         julien-baeriswyl-heigvd)
  * @author Iando  Rafidimalala [CREATED BY] (iando.rafidimalalathevoz@heig-vd.ch, Mantha32)
@@ -36,5 +36,11 @@ public interface ISMTPClient
      */
     boolean isConnected ();
 
+    /**
+     * Process mail sending, from sender to recipients (To, Cc, Bcc).
+     *
+     * @param mail to send
+     * @throws IOException if sending mail on network failed
+     */
     void sendMail (Mail mail) throws IOException;
 }

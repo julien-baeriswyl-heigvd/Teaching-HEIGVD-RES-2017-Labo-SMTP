@@ -1,7 +1,7 @@
 package ch.heigvd.res.labs.mailbot.net.protocol;
 
 /**
- * 
+ * SMTP Protocol model.
  * 
  * @author Julien Baeriswyl    [CREATED BY] (julien.baeriswyl@heig-vd.ch,         julien-baeriswyl-heigvd)
  * @author Iando  Rafidimalala [CREATED BY] (iando.rafidimalalathevoz@heig-vd.ch, Mantha32)
@@ -26,12 +26,15 @@ public class SMTP
                                 TRANSACTION_FAILED = 554;
     }
 
+    /**
+     * Represents commands of SMTP protocol.
+     */
     public static class Command
     {
         private static final String ENTER = "\r\n";
-        private String     mnemonic;
-        private int        codeSuccess;
-        private boolean    hasField;
+        private String  mnemonic;
+        private int     codeSuccess;
+        private boolean hasField;
 
         private Command (String mnemonic, int codeSuccess, boolean hasField)
         {
@@ -50,17 +53,30 @@ public class SMTP
             return mnemonic;
         }
 
+        /**
+         * Return prepared command string, in a line (line break included)
+         *
+         * @param data field append to mnemonic, if required
+         * @return command string
+         */
         public String prepare (String data)
         {
             return mnemonic + " " + (hasField ? data : "") + ENTER;
         }
 
+        /**
+         * Extract return code from given server response.
+         *
+         * @param response received by server
+         * @return code
+         */
         public static int parseCode (String response)
         {
-            return Integer.parseInt(response.substring(0,3));
+            return Integer.parseInt(response.substring(0, 3));
         }
     }
 
+    // JBL: list of known command
     public static final Command EHLO      = new Command("EHLO", ReturnCode.REQUEST_OK, true),
                                 MAIL_FROM = new Command("MAIL FROM:", ReturnCode.REQUEST_OK, true),
                                 RCPT_TO   = new Command("RCPT TO:", ReturnCode.REQUEST_OK, true),
