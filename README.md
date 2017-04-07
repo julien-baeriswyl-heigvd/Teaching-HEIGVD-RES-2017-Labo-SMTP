@@ -34,10 +34,10 @@ If you want to test this tool, a mock server like [MockMock](https://github.com/
 
 Once install of mock server and this project is done, you can launch campaign, by starting server first and execute our tool.  
 
-Result will looks like this:
-![Dashboard](figures/basic_sample.png)
-![Mail1](figures/sample_mail1.png)
-![Mail2](figures/sample_mail2.png)
+Result will looks like this:  
+![Dashboard](figures/basic_sample.png)  
+![Mail1](figures/sample_mail1.png)  
+![Mail2](figures/sample_mail2.png)  
 
 ## Objectives
 
