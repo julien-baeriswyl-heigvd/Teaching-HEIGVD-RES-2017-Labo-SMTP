@@ -142,7 +142,6 @@ public class SMTPClient implements ISMTPClient
             pw.println(body);
             pw.flush();
             sendCommand(SMTP.ENDDATA);
-            System.out.println("to");
         }
 
         for (Person cc : mail.getCc())
@@ -153,7 +152,6 @@ public class SMTPClient implements ISMTPClient
             pw.println(body);
             pw.flush();
             sendCommand(SMTP.ENDDATA);
-            System.out.println("cc");
         }
 
         for (Person bcc : mail.getBcc())
@@ -164,7 +162,6 @@ public class SMTPClient implements ISMTPClient
             pw.println(body);
             pw.flush();
             sendCommand(SMTP.ENDDATA);
-            System.out.println("bcc");
         }
     }
 }

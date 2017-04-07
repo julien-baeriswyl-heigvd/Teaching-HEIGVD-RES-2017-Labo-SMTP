@@ -52,7 +52,7 @@ public class PrankGenerator
         Person sender;
 
         // JBL: prepare groups and send mails
-        for (int fromIdx = 0, toIdx = groupSize + remainGroup; toIdx <= victims.size(); fromIdx += (toIdx - fromIdx), toIdx += groupSize)
+        for (int fromIdx = 0, toIdx = groupSize + remainGroup; toIdx <= victims.size(); fromIdx = toIdx, toIdx += groupSize)
         {
             subGroup = victims.subGroup(fromIdx, toIdx);
             idx      = (int)(Math.random() * subGroup.size());
