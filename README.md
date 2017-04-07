@@ -34,6 +34,11 @@ If you want to test this tool, a mock server like [MockMock](https://github.com/
 
 Once install of mock server and this project is done, you can launch campaign, by starting server first and execute our tool.  
 
+Result will looks like this:
+![Dashboard](figures/basic_sample.png)
+![Mail1](figures/sample_mail1.png)
+![Mail2](figures/sample_mail2.png)
+
 ## Objectives
 
 In this lab, you will develop a client application (TCP) in Java. This client application will use the Socket API to communicate with a SMTP server. The code that you write will include a **partial implementation of the SMTP protocol**. These are the objectives of the lab:
