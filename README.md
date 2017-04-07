@@ -10,6 +10,12 @@ However, SMTP protocol is not fully implemented, meaning tool can possibly crash
 if server doesn't answer expectedly.  
 Therefore, we recommend you use this project as toy and not as production util.  
 
+## Approach
+Our application divides list of victims in non-overlapping (if no repetition in list) groups.  
+In each group, one victim is chosen as sender, and the others are recipients.  
+The sender does not receive any e-mail, and basically does not known he is used as scapegoat.  
+On the other hand, a witness is chosen, and receive mail in carbon copy mode.  
+
 ## Prerequisites
 ### Dependancies
 + Apache Maven
