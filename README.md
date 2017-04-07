@@ -23,8 +23,7 @@ User must define few files, to make successful *prank* campaign.
 
 ## Use case
 Once resources are placed, we can launch campaign with command
-```
-:::bash
+```bash
 java -jar <jardir>MailBot-code-1.0-SNAPSHOT-standalone.jar <configdir> <datadir>
 ```
 
