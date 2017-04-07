@@ -131,34 +131,26 @@ public class SMTPClient implements ISMTPClient
     {
         String body = mail.toString();
 
+        sendCommand(SMTP.MAIL_FROM, mail.getFrom().getEmail());
+
         for (Person to : mail.getTo())
         {
-            sendCommand(SMTP.MAIL_FROM, mail.getFrom().getEmail());
             sendCommand(SMTP.RCPT_TO, to.getEmail());
-            sendCommand(SMTP.DATA);
-            pw.println(body);
-            pw.flush();
-            sendCommand(SMTP.ENDDATA);
         }
 
         for (Person cc : mail.getCc())
         {
-            sendCommand(SMTP.MAIL_FROM, mail.getFrom().getEmail());
             sendCommand(SMTP.RCPT_TO, cc.getEmail());
-            sendCommand(SMTP.DATA);
-            pw.println(body);
-            pw.flush();
-            sendCommand(SMTP.ENDDATA);
         }
 
         for (Person bcc : mail.getBcc())
         {
-            sendCommand(SMTP.MAIL_FROM, mail.getFrom().getEmail());
             sendCommand(SMTP.RCPT_TO, bcc.getEmail());
-            sendCommand(SMTP.DATA);
-            pw.println(body);
-            pw.flush();
-            sendCommand(SMTP.ENDDATA);
         }
+
+        sendCommand(SMTP.DATA);
+        pw.println(body);
+        pw.flush();
+        sendCommand(SMTP.ENDDATA);
     }
 }
