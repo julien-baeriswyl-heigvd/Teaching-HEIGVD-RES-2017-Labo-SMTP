@@ -4,9 +4,11 @@
 This project allow to launch *prank* campaign of forged e-mails.  
 The provided tool is based on files and pseudo-random to define who are senders and who are recipients.  
 
-### Approach
-Project contains basic implementation of protocol and client SMTP.
-Therefore, SMTP server is required 
+## Caution
+Project contains basic implementation of protocol and client SMTP.  
+However, SMTP protocol is not fully implemented, meaning tool can possibly crash,  
+if server doesn't answer expectedly.  
+Therefore, we recommend you use this project as toy and not as production util.  
 
 ## Prerequisites
 ### Dependancies
