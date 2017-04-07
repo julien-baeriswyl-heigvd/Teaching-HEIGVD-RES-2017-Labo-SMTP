@@ -1,5 +1,32 @@
 # Teaching-HEIGVD-RES-2017-Labo-SMTP
 
+## Prerequisites
+### Dependancies
++ Apache Maven
+
+### Resources structure
+User must define few files, to make successful *prank* campaign.
++ __cfg__ directory
+      + __client.properties__, the configutation file, looks like
+
+![config](./MailBot/MailBot-code/cfg/client.properties)
+
++ __data__ directory
+      1. __victims.utf8__, the victims' list, looks like
+
+![config](./MailBot/MailBot-code/data/victims.utf8)
+
+      2. __messages.utf8__, the list of messages, looks like
+      
+![config](./MailBot/MailBot-code/data/messages.utf8)
+
+## Use case
+Once resources are placed, we can launch campaign with command
+```
+:::bash
+java -jar <jardir>MailBot-code-1.0-SNAPSHOT-standalone.jar <configdir> <datadir>
+```
+
 ## Objectives
 
 In this lab, you will develop a client application (TCP) in Java. This client application will use the Socket API to communicate with a SMTP server. The code that you write will include a **partial implementation of the SMTP protocol**. These are the objectives of the lab:
