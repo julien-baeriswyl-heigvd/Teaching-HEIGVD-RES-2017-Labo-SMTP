@@ -2,6 +2,7 @@ package ch.heigvd.res.labs.mailbot.model.mail;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -13,14 +14,15 @@ import java.util.List;
  */
 public class Group extends ArrayList<Person>
 {
-    public Group (Person... people)
+    public Group (List<Person> people)
     {
         super();
+        addAll(people);
+    }
 
-        for (Person p : people)
-        {
-            add(p);
-        }
+    public Group (Person... people)
+    {
+        this(Arrays.asList(people));
     }
 
     /**
@@ -42,5 +44,17 @@ public class Group extends ArrayList<Person>
                 idx1 = s.indexOf(fieldSeparator, idx0 + 1);
             add(new Person(s.substring(0, idx0), s.substring(idx0 + 1, idx1), s.substring(idx1 + 1)));
         }
+    }
+
+    /**
+     * Build subgroup from current group.
+     *
+     * @param fromIndex index on first person (included)
+     * @param toIndex   index on last  person (excluded)
+     * @return subgroup
+     */
+    public Group subGroup (int fromIndex, int toIndex)
+    {
+        return new Group(subList(fromIndex, toIndex));
     }
 }

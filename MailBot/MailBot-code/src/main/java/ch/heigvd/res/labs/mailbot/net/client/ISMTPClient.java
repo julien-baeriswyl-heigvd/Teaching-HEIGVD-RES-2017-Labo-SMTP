@@ -23,7 +23,7 @@ public interface ISMTPClient
     void connect (String server, int port) throws IOException;
 
     /**
-     * Disconnects from the server by issuing the 'BYE' command.
+     * Disconnects from the server by issuing the 'QUIT' command.
      *
      * @throws IOException
      */
