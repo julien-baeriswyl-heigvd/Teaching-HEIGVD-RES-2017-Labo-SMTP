@@ -1,0 +1,36 @@
+julienbaeriswyl@jblc:/$ telnet smtp.heig-vd.ch 25
+Trying 10.192.202.11...
+Connected to webmail.heig-vd.ch.
+Escape character is '^]'.
+220 EIMAIL01.einet.ad.eivd.ch Microsoft ESMTP MAIL Service ready at Thu, 6 Apr 2017 23:05:34 +0200
+EHLO julien-baeriswyl-heigvd
+250-EIMAIL01.einet.ad.eivd.ch Hello [10.192.204.11]
+250-SIZE 23068672
+250-PIPELINING
+250-DSN
+250-ENHANCEDSTATUSCODES
+250-STARTTLS
+250-X-ANONYMOUSTLS
+250-AUTH NTLM
+250-X-EXPS GSSAPI NTLM
+250-8BITMIME
+250-BINARYMIME
+250-CHUNKING
+250 XRDST
+MAIL FROM: julien.baeriswyl@heig-vd.ch
+250 2.1.0 Sender OK
+RCPT TO: olivier.liechti@heig-vd.ch
+250 2.1.5 Recipient OK
+DATA
+354 Start mail input; end with <CRLF>.<CRLF>
+From: miguel.santamaria@heig-vd.ch
+To: olivier.liechti@heig-vd.ch
+Subject: [RES] SMTP - julien.baeriswyl@heig-vd.ch
+
+Laboratoire rC)ussi.       
+.
+250 2.6.0 <149250b3-6b80-408d-853f-ad781ca7a77c@EIMAIL01.einet.ad.eivd.ch> [InternalId=145869974276023, Hostname=EINTMBXA.einet.ad.eivd.ch] Queued mail for delivery
+QUIT
+221 2.0.0 Service closing transmission channel
+Connection closed by foreign host.
+julienbaeriswyl@jblc:/$
